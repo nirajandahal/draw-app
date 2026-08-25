@@ -1,0 +1,9 @@
+{
+  "appId": "com.drawcanvas.app",
+  "appName": "Draw",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false,
+    "backgroundColor": "#EAF0FB"
+  }
+}
