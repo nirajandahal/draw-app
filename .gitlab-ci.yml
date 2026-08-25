@@ -24,8 +24,13 @@ debug-apk:
       - .gradle/wrapper/
       - node_modules/
   before_script:
-    - apt-get update -qq && apt-get install -y -qq openjdk-17-jdk-headless unzip > /dev/null
-    - export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+    # Capacitor 8 compiles against Java 21, which is not in Debian bookworm's
+    # main repo, so pull Temurin 21 from Adoptium.
+    - apt-get update -qq && apt-get install -y -qq wget gpg unzip apt-transport-https > /dev/null
+    - wget -qO- https://packages.adoptium.net/artifactory/api/gpg/key/public | gpg --dearmor > /usr/share/keyrings/adoptium.gpg
+    - echo "deb [signed-by=/usr/share/keyrings/adoptium.gpg] https://packages.adoptium.net/artifactory/deb bookworm main" > /etc/apt/sources.list.d/adoptium.list
+    - apt-get update -qq && apt-get install -y -qq temurin-21-jdk > /dev/null
+    - export JAVA_HOME=/usr/lib/jvm/temurin-21-jdk-amd64
     - |
       if [ ! -d "$ANDROID_SDK_ROOT/cmdline-tools/latest" ]; then
         echo "Installing Android command line tools..."
